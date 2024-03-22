@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faBars, faMagnifyingGlass, faChartLine, faMoneyBillTrendUp, faStore, faChartSimple, faGear, faArrowRightFromBracket, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { faHippo, faChartLine, faCar } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 import Topbar from '../TopBar';
 import api from '../../api/api';
@@ -12,9 +12,8 @@ const Sidebar = ({ children }: any) => {
 
     const menuOptions = [
         
-        { title: "Analytics", icon: <FontAwesomeIcon icon={faChartSimple} />, spacing: true, action: "analytics" }
+        { title: "Viagens", icon: <FontAwesomeIcon icon={faCar} />, spacing: true, action: "viagens" }
     ]
-
 
     const handleMenuClick = (action: string) => {
 
