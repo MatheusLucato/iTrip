@@ -4,21 +4,21 @@ import { DateTime } from 'luxon'
 
 export default class AuthService {
 
-    public async login(auth, email, password, response) {
-        const usuario = await User.findBy('email', email)
+    public async login(auth, username, password, response) {
+        const usuario = await User.findBy('username', username)
         if (!usuario) {
             return response.badRequest('Usuário não encontrado')
         }
 
         try {
-            const token = await auth.use('api').attempt(email, password, {
+            const token = await auth.use('api').attempt(username, password, {
                 expiresIn: '120mins',
-                name: usuario?.email,
+                name: usuario?.username,
             })
 
             await this.addTokenLog(token, usuario)
 
-            return { token, usuario: { id: usuario?.id, email: usuario?.email } }
+            return { token, usuario: { id: usuario?.id, username: usuario?.username } }
         } catch {
             return response.unauthorized('Credenciais inválidas')
         }
@@ -96,6 +96,34 @@ export default class AuthService {
         } catch (error){
             console.error('Erro ao procurar USERID:', error);
             return response.status(500);
+        }
+    }
+
+    public async register(auth, username, password, response){
+        try{
+            
+            const existingUser = await User.findBy('username', username)
+            if (existingUser) {
+                return response.badRequest('O username já está em uso')
+            }
+
+            const user = await User.create({
+                username,
+                password
+            })
+
+            const token = await auth.use('api').attempt(username, password, {
+                expiresIn: '120mins',
+                name: user.username,
+            });
+            
+            await this.addTokenLog(token, user);
+
+
+            return { token, usuario: { id: user?.id, username: user?.username } }
+        } catch(error){
+            console.error('Erro ao registrar usuário:', error)
+            return response.status(500).send({ message: 'Erro ao registrar usuário' })
         }
     }
     

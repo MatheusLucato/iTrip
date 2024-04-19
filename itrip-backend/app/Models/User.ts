@@ -13,7 +13,7 @@ export default class User extends BaseModel {
   public secure_id: string
 
   @column()
-  public email: string
+  public username: string
 
   @column()
   public password: string

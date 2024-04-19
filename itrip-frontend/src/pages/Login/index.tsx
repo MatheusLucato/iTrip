@@ -4,32 +4,29 @@ import { useNavigate } from "react-router-dom";
 import api from '../../api/api'
 import eyeClosed from '../../img/Olho Fechado.svg'
 import eyeOpen from '../../img/Olho.svg'
+import axios from 'axios';
 
 export function Login() {
     localStorage.removeItem('token');
     const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate();
-    const [email, setEmail] = useState("");
+    const [username, setusername] = useState("");
     const [password, setPassword] = useState("");
+    const [newpass, setNewpass] = useState("");
+    const [confirmNewPass, setConfirmNewPass] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
+    const [showPasswordRegister, setShowPasswordRegister] = useState(false);
     const [phone, setPhone] = useState("");
-    const [isDriver, setIsDriver] = useState(false);
-    const [isPassenger, setIsPassenger] = useState(false);
+    const [role, setRole] = useState(""); 
 
-    const handleDriverChange = (e: any) => {
-        setIsDriver(e.target.checked);
-        setIsPassenger(false);
-    };
-
-    const handlePassengerChange = (e: any) => {
-        setIsPassenger(e.target.checked);
-        setIsDriver(false);
+    const handleRoleChange = (e: any) => {
+        setRole(e.target.value);
     };
 
     async function login() {
         try {
-            const response = await api.post("/api/login", { email, password });
+            const response = await api.post("/api/login", { username, password });
             const { token } = response.data;
             if (token && token.token) {
                 const expirationDate = new Date(token.expires_at);
@@ -64,22 +61,55 @@ export function Login() {
         setShowPassword(!showPassword);
     };
 
+    const togglePasswordVisibilityRegister = () => {
+        setShowPasswordRegister(!showPasswordRegister);
+    };
+
+    async function register() {
+        try {
+            if (newpass !== confirmNewPass) {
+                setError('As senhas não coincidem.');
+                return;
+            }
+            const response = await api.post("/api/register", { username, confirmNewPass });
+
+            const { token } = response.data;
+            
+            if (token && token.token) {
+                const expirationDate = new Date(token.expires_at);
+                const currentDate = new Date();
+                if (expirationDate > currentDate) {
+                    localStorage.setItem("token", token.token);
+                    navigate("/home");
+                } else {
+                    setError("O token de autenticação expirou. Faça login novamente.");
+                }
+            } else {
+                setError("Credenciais inválidas. Verifique seu e-mail e senha.");
+            }
+        } catch (error) {
+            setError('Ocorreu um erro ao registrar. Por favor, tente novamente mais tarde.');
+        }
+    }
+
     return (
         <div className='body'>
             <div className={`container ${isActive ? 'active' : ''}`} id="container">
                 <div className="flex justify-center items-center h-full">
                     <div className="w-1/2 flex justify-center">
                         <div className="form-container sign-up">
-                            <form action="https://formspree.io/f/mnqevjrr" method="POST">
+                            <form onSubmit={(e) => { e.preventDefault(); register(); }} >
                                 <h1>Preencha os dados</h1>
                                 <input type="hidden" name="_next" value="http://localhost:3000/" />
-                                <input type="text" placeholder="Nome de usuario" id="name" name="name" required />
-                                <input type="text" placeholder="Senha" id="newPass" name="newPass" required />
-                                <input type="text" placeholder="Confirma senha" id="confirmNewPass" name="confirmNewPass" required />
-                                <input type="checkbox" id="motorista" name="motorista" checked={isDriver} onChange={handleDriverChange} />
-                                <label htmlFor="motorista">Motorista</label>
-                                <input type="checkbox" id="passageiro" name="passageiro" checked={isPassenger} onChange={handlePassengerChange} />
-                                <label htmlFor="passageiro">Passageiro</label>
+                                <input type="text" placeholder="Username" id="name" name="name" onChange={(e: any) => setusername(e.target.value)} required />
+                                <div className="password-input-container">
+                                    <input placeholder="Senha" id="newPass" type={showPasswordRegister ? "text" : "password"} name="newPass" onChange={(e: any) => setNewpass(e.target.value)} required />
+                                    <img className="password-icon" src={showPasswordRegister ? eyeOpen : eyeClosed} onClick={togglePasswordVisibilityRegister} alt="Toggle password visibility" />
+                                </div>
+                                <div className="password-input-container">
+                                    <input type={showPasswordRegister ? "text" : "password"} placeholder="Confirma senha" id="confirmNewPass" name="confirmNewPass" onChange={(e: any) => setConfirmNewPass(e.target.value)} required />
+                                    <img className="password-icon" src={showPasswordRegister ? eyeOpen : eyeClosed} onClick={togglePasswordVisibilityRegister} alt="Toggle password visibility" />
+                                </div>
                                 <button type="submit">Cadastrar</button>
                             </form>
                         </div>
@@ -88,7 +118,7 @@ export function Login() {
                         <div className="form-container sign-in">
                             <form>
                                 <h1>Login</h1>
-                                <input type="email" placeholder="Email" value={email} onChange={(e: any) => setEmail(e.target.value)} />
+                                <input type="username" placeholder="Username" value={username} onChange={(e: any) => setusername(e.target.value)} />
                                 <div className="password-input-container">
                                     <input className="input-password" type={showPassword ? "text" : "password"} placeholder="Senha" value={password} onChange={(e: any) => setPassword(e.target.value)} />
                                     <img className="password-icon" src={showPassword ? eyeOpen : eyeClosed} onClick={togglePasswordVisibility} alt="Toggle password visibility" />
@@ -103,7 +133,7 @@ export function Login() {
                 <div className="toggle-container">
                     <div className="toggle">
                         <div className="toggle-panel toggle-left">
-                            <h1>Já faz parte do nosso time?</h1>
+                            <h1>Já faz parte?</h1>
                             <p>Entre com sua conta!</p>
                             <button onClick={handleLoginClick} id="login">Entrar</button>
                         </div>
