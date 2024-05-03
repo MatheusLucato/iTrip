@@ -6,7 +6,6 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import api from '../src/api/api';
 import InvalidPage from './pages/Invalid';
-import User from './pages/User';
 
 function App() {
 const [isTokenValid, setTokenValid] = useState(false);
@@ -61,8 +60,6 @@ useEffect(() => {
       <Route path="*" element={<InvalidPage />} />
 
       <Route path="/login" element={<Login />} />
-
-      <Route path="/user" element={<User />} />
       
     </Routes>
   );

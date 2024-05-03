@@ -11,8 +11,4 @@ Route.group(() => {
   Route.post('findUserIdByToken', 'AuthController.findUserIdByToken')
   Route.post('closeWindowDelete', 'AuthController.closeWindowDelete')
   Route.post('register', 'AuthController.register')
-  Route.get('/user', 'UserController.show')
-  Route.put('/user', 'UserController.update')
-  Route.put('/api/user/update', 'UserController.update')
-
 }).prefix('api')
