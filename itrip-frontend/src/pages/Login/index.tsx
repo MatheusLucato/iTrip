@@ -100,6 +100,11 @@ export function Login() {
                         <div className="form-container sign-up">
                             <form onSubmit={(e) => { e.preventDefault(); register(); }} >
                                 <h1>Preencha os dados</h1>
+                                <select className="mt-5 mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                    <option selected>Selecione a categoria da conta</option>
+                                    <option value="1">Motorista</option>
+                                    <option value="0">Passageiro</option>
+                                </select>
                                 <input type="hidden" name="_next" value="http://localhost:3000/" />
                                 <input type="text" placeholder="Username" id="name" name="name" onChange={(e: any) => setusername(e.target.value)} required />
                                 <div className="password-input-container">
@@ -110,6 +115,8 @@ export function Login() {
                                     <input type={showPasswordRegister ? "text" : "password"} placeholder="Confirma senha" id="confirmNewPass" name="confirmNewPass" onChange={(e: any) => setConfirmNewPass(e.target.value)} required />
                                     <img className="password-icon" src={showPasswordRegister ? eyeOpen : eyeClosed} onClick={togglePasswordVisibilityRegister} alt="Toggle password visibility" />
                                 </div>
+                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an option</label>
+                                
                                 <button type="submit">Cadastrar</button>
                             </form>
                         </div>
