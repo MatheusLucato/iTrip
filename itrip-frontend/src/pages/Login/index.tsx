@@ -33,6 +33,7 @@ export function Login() {
                 const currentDate = new Date();
                 if (expirationDate > currentDate) {
                     localStorage.setItem("token", token.token);
+                    localStorage.setItem("username", response.data.usuario.username)
                     navigate("/home");
                 } else {
                     setError("O token de autenticação expirou. Faça login novamente.");
@@ -80,6 +81,7 @@ export function Login() {
                 const currentDate = new Date();
                 if (expirationDate > currentDate) {
                     localStorage.setItem("token", token.token);
+                    localStorage.setItem("username", response.data.usuario.username);
                     navigate("/home");
                 } else {
                     setError("O token de autenticação expirou. Faça login novamente.");

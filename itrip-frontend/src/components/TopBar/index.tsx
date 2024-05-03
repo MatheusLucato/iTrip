@@ -19,6 +19,7 @@ const Topbar = () => {
         deleteTokenLog();
         await api.post("/api/logout");
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
         navigate("/login");
     } catch (error: any) {
         console.log("Não foi possivel realizar o logout!");
