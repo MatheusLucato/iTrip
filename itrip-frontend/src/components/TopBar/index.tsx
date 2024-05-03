@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 const Topbar = () => {
   const theme = useTheme();
   const navigate = useNavigate()
+  
 
   async function logout() {
     try {
@@ -33,6 +34,13 @@ async function deleteTokenLog() {
     } catch (error: any) {
 
     }
+}
+
+async function user() {
+  try {
+        navigate("/user");
+  } catch (error: any) {
+  }
 }
 
   return (
@@ -61,7 +69,7 @@ async function deleteTokenLog() {
           <IconButton>
             <SettingsOutlinedIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={user}>
             <Avatar
               style={{ width: "30px", height: "30px" }}
               src={userLogo}
