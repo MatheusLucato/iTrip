@@ -43,6 +43,11 @@ async function user() {
   }
 }
 
+const handleSettingsClick = () => {
+  navigate("/Ajustes");
+};
+
+
   return (
     <div>
 
@@ -66,7 +71,7 @@ async function user() {
           <IconButton>
             <NotificationsOutlinedIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handleSettingsClick}>
             <SettingsOutlinedIcon />
           </IconButton>
           <IconButton onClick={user}>

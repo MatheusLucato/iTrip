@@ -1,63 +1,100 @@
+/* styles.css */
+
+/* Estilos gerais */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Tema escuro */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
 .container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
-  }
-  
-  .field {
-    margin-bottom: 20px;
-  }
-  
-  .field label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333333;
-  }
-  
-  .field input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: border-color 0.3s ease;
-  }
-  
-  .field input:disabled {
-    background-color: #f0f0f0;
-  }
-  
-  .field input:focus {
-    outline: none;
-    border-color: #007bff;
-  }
-  
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .buttons button {
-    padding: 12px 24px;
-    font-size: 16px;
-    color: #ffffff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .buttons button:hover {
-    background-color: #0056b3;
-  }
-  
-  .separator {
-    margin-top: 20px;
-    border-top: 1px solid #cccccc;
-  }
-  
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+/* Ajuste do container no tema escuro */
+body.dark-mode .container {
+  background-color: #1e1e1e;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.field input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+/* Ajuste do campo de entrada no tema escuro */
+body.dark-mode .field input {
+  background-color: #2e2e2e;
+  border: 1px solid #555;
+  color: #fff;
+}
+
+.error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.role-selection,
+.theme-toggle {
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Ajuste dos botões no tema claro */
+button {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Ajuste dos botões no tema escuro */
+body.dark-mode button {
+  background-color: #1a73e8;
+  color: #fff;
+}
+
+/* Ajuste dos botões de alternância de tema */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}

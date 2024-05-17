@@ -7,6 +7,7 @@ import { Login } from './pages/Login';
 import api from '../src/api/api';
 import InvalidPage from './pages/Invalid';
 import User from './pages/User';
+import Ajustes from './pages/Ajustes';
 
 function App() {
 const [isTokenValid, setTokenValid] = useState(false);
@@ -63,6 +64,12 @@ useEffect(() => {
       <Route path="/login" element={<Login />} />
 
       <Route path="/user" element={<User />} />
+
+      <Route path="/Ajustes" element={<Ajustes />} />
+
+      <Route path="*" element={<InvalidPage />} />
+
+
       
     </Routes>
   );

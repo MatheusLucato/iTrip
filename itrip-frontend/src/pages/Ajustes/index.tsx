@@ -117,6 +117,9 @@ const Settings: React.FC = () => {
           </>
         )}
       </Box>
+      <div className="role-selection">
+        <label>Role</label>
+      </div>
       <div className="theme-toggle">
         <FormControlLabel
           control={
