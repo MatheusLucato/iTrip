@@ -7,7 +7,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-body {
+.body {
     background-color: rgb(243, 242, 242);
     display: flex;
     align-items: center;
@@ -28,16 +28,6 @@ body {
     width: 768px;
     max-width: 500px;
     min-height: 550px;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.container h2 {
-    margin-bottom: 20px;
-    color: #333;
-    text-align: center;
 }
 
 .container p {
@@ -70,11 +60,6 @@ body {
     text-transform: uppercase;
     margin-top: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.container button:hover {
-    background-color: #185a94;
 }
 
 .container button.hidden {
@@ -99,8 +84,19 @@ body {
     padding: 10px 15px;
     font-size: 13px;
     border-radius: 8px;
-    width: 100%;
+    width: 110%;
     outline: none;
+}
+
+.role-selection {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0px;
+    margin-top: 30px; /* Adicionando margem superior */
+}
+
+.role-selection button {
+    margin: 20 10px;
 }
 
 .form-container {
@@ -239,29 +235,9 @@ body {
     padding-right: 40px;
 }
 
-.password-icon {
+.password-icon {    
     position: absolute;
     right: 10px;
     cursor: pointer;
     z-index: 10;
-}
-
-.theme-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.role-selection {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.error-message {
-    color: red;
-    margin-bottom: 10px;
-    text-align: center;
 }
