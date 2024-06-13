@@ -1,3 +1,6 @@
+Run Migration
+node ace migration:run
+
 Create Migration
 Example: node ace make:migration users
 
