@@ -14,4 +14,5 @@ Route.group(() => {
 
   
   Route.put('changePassword', 'UserController.changePassword')
+  Route.put('deleteAccount', 'UserController.deleteAccount')
 }).prefix('api')

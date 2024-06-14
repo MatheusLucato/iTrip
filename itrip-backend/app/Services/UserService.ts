@@ -45,4 +45,34 @@ export default class UserService {
             return { error: 'Erro ao processar a mudança de senha.' };
         }
     }
+
+
+    async deleteAccount(auth, token) {
+
+        const usersLog = await Users_Log.findBy('token', token);
+
+        if (!usersLog) {
+            return false
+        }
+
+        const user = await User.find(usersLog.user_id);
+
+        if (!user) {
+            return false
+        }
+
+        try {
+            await usersLog.delete()
+
+            await user.delete()
+
+
+            return true;
+
+
+        } catch (error) {
+            console.error('Erro ao mudar a senha:', error);
+            return false;
+        }
+    }
 }

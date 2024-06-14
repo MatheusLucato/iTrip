@@ -22,4 +22,21 @@ export default class UserController {
             return response.internalServerError('Erro ao processar a mudança de senha.');
         }
     }
+
+    public async deleteAccount({ auth, request, response }: HttpContextContract) {
+
+        const token = request.input('token')
+
+        try {
+            const deleted = await this.userService.deleteAccount(auth, token);
+            if (deleted) {
+                return response.ok({ message: 'Conta excluida com sucesso!' });
+            } else {
+                return response.badRequest('Ocorreu um erro.');
+            }
+        } catch (error) {
+            console.error(error);
+            return response.internalServerError('Erro ao processar a exclusao da conta.');
+        }
+    }
 }
