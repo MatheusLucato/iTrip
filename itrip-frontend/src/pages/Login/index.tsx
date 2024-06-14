@@ -4,146 +4,53 @@ import { useNavigate } from "react-router-dom";
 import api from '../../api/api'
 import eyeClosed from '../../img/Olho Fechado.svg'
 import eyeOpen from '../../img/Olho.svg'
-import axios from 'axios';
 
 export function Login() {
     localStorage.removeItem('token');
-    const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate();
     const [username, setusername] = useState("");
     const [password, setPassword] = useState("");
-    const [newpass, setNewpass] = useState("");
-    const [confirmNewPass, setConfirmNewPass] = useState("");
     const [error, setError] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const [showPasswordRegister, setShowPasswordRegister] = useState(false);
-    const [phone, setPhone] = useState("");
-    const [role, setRole] = useState(""); 
 
-    const handleRoleChange = (e: any) => {
-        setRole(e.target.value);
-    };
-
-    async function login() {
+    const handleLogin = async (e: any) => {
+        e.preventDefault();
         try {
             const response = await api.post("/api/login", { username, password });
             const { token } = response.data;
+
             if (token && token.token) {
-                const expirationDate = new Date(token.expires_at);
-                const currentDate = new Date();
-                if (expirationDate > currentDate) {
-                    localStorage.setItem("token", token.token);
-                    navigate("/home");
-                } else {
-                    setError("O token de autenticação expirou. Faça login novamente.");
-                }
+                localStorage.setItem("token", token.token);
+                localStorage.setItem("username", response.data.usuario.username)
+                navigate("/home");
             } else {
                 setError("Credenciais inválidas. Verifique seu e-mail e senha.");
             }
-        } catch (error: any) {
-            if (error.response && error.response.status === 401) {
-                setError("E-mail ou senha incorreta.");
-            } else {
-                setError("Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.");
-            }
+        } catch {
+            setError("Ocorreu um erro ao fazer login. Por favor, tente novamente mais tarde.");
         }
-    }
-
-    const handleRegisterClick = () => {
-        setIsActive(true);
     };
 
-    const handleLoginClick = () => {
-        setIsActive(false);
+    const togglePasswordVisibility = () => setShowPassword(!showPassword);
+
+    const goToRegister = () => {
+        navigate("/register")
     };
-
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
-    };
-
-    const togglePasswordVisibilityRegister = () => {
-        setShowPasswordRegister(!showPasswordRegister);
-    };
-
-    async function register() {
-        try {
-            if (newpass !== confirmNewPass) {
-                setError('As senhas não coincidem.');
-                return;
-            }
-            const response = await api.post("/api/register", { username, confirmNewPass });
-
-            const { token } = response.data;
-            
-            if (token && token.token) {
-                const expirationDate = new Date(token.expires_at);
-                const currentDate = new Date();
-                if (expirationDate > currentDate) {
-                    localStorage.setItem("token", token.token);
-                    navigate("/home");
-                } else {
-                    setError("O token de autenticação expirou. Faça login novamente.");
-                }
-            } else {
-                setError("Credenciais inválidas. Verifique seu e-mail e senha.");
-            }
-        } catch (error) {
-            setError('Ocorreu um erro ao registrar. Por favor, tente novamente mais tarde.');
-        }
-    }
 
     return (
-        <div className='body'>
-            <div className={`container ${isActive ? 'active' : ''}`} id="container">
-                <div className="flex justify-center items-center h-full">
-                    <div className="w-1/2 flex justify-center">
-                        <div className="form-container sign-up">
-                            <form onSubmit={(e) => { e.preventDefault(); register(); }} >
-                                <h1>Preencha os dados</h1>
-                                <input type="hidden" name="_next" value="http://localhost:3000/" />
-                                <input type="text" placeholder="Username" id="name" name="name" onChange={(e: any) => setusername(e.target.value)} required />
-                                <div className="password-input-container">
-                                    <input placeholder="Senha" id="newPass" type={showPasswordRegister ? "text" : "password"} name="newPass" onChange={(e: any) => setNewpass(e.target.value)} required />
-                                    <img className="password-icon" src={showPasswordRegister ? eyeOpen : eyeClosed} onClick={togglePasswordVisibilityRegister} alt="Toggle password visibility" />
-                                </div>
-                                <div className="password-input-container">
-                                    <input type={showPasswordRegister ? "text" : "password"} placeholder="Confirma senha" id="confirmNewPass" name="confirmNewPass" onChange={(e: any) => setConfirmNewPass(e.target.value)} required />
-                                    <img className="password-icon" src={showPasswordRegister ? eyeOpen : eyeClosed} onClick={togglePasswordVisibilityRegister} alt="Toggle password visibility" />
-                                </div>
-                                <button type="submit">Cadastrar</button>
-                            </form>
-                        </div>
+        <div className='body bg-gray-100 flex justify-center items-center h-screen'>
+            <div className="container bg-white p-8 rounded-3xl shadow-md w-96"> {/* Increased border radius */}
+                <form onSubmit={handleLogin}>
+                    <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
+                    <input type="text" placeholder="Username" className="input border border-gray-300 p-2 w-full mb-4 rounded-lg" value={username} onChange={(e) => setusername(e.target.value)} required />
+                    <div className="password-input-container relative mb-4">
+                        <input className="input border border-gray-300 p-2 w-full rounded-lg" type={showPassword ? "text" : "password"} placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                        <img className="password-icon absolute inset-y-0 right-2 top-1/2 transform -translate-y-1/2 cursor-pointer" src={showPassword ? eyeOpen : eyeClosed} onClick={togglePasswordVisibility} alt="Toggle password visibility" />
                     </div>
-                    <div className="w-1/2 flex justify-center">
-                        <div className="form-container sign-in">
-                            <form>
-                                <h1>Login</h1>
-                                <input type="username" placeholder="Username" value={username} onChange={(e: any) => setusername(e.target.value)} />
-                                <div className="password-input-container">
-                                    <input className="input-password" type={showPassword ? "text" : "password"} placeholder="Senha" value={password} onChange={(e: any) => setPassword(e.target.value)} />
-                                    <img className="password-icon" src={showPassword ? eyeOpen : eyeClosed} onClick={togglePasswordVisibility} alt="Toggle password visibility" />
-                                </div>
-                                <a href="#">Esqueceu sua senha?</a>
-                                <button type="submit" onClick={(e: any) => { e.preventDefault(); login(); }}>Entrar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="toggle-container">
-                    <div className="toggle">
-                        <div className="toggle-panel toggle-left">
-                            <h1>Já faz parte?</h1>
-                            <p>Entre com sua conta!</p>
-                            <button onClick={handleLoginClick} id="login">Entrar</button>
-                        </div>
-                        <div className="toggle-panel toggle-right">
-                            <h1>Bem Vindo!</h1>
-                            <p>Crie agora mesmo sua conta!</p>
-                            <button onClick={handleRegisterClick} id="register">Criar</button>
-                        </div>
-                    </div>
-                </div>
+                    {error && <p className="text-red-500 text-sm mt-2 text-center">{error}</p>}
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-lg w-full mb-4" type="submit">Entrar</button>
+                    <button className="text-blue-500 hover:text-blue-700 text-sm w-full text-center" type="button" onClick={goToRegister}>Não tem conta? Cadastre-se</button>
+                </form>
             </div>
         </div>
     );
