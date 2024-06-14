@@ -13,13 +13,13 @@ import { useNavigate } from "react-router-dom";
 const Topbar = () => {
   const theme = useTheme();
   const navigate = useNavigate()
-  
 
   async function logout() {
     try {
         deleteTokenLog();
         await api.post("/api/logout");
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
         navigate("/login");
     } catch (error: any) {
         console.log("Não foi possivel realizar o logout!");
@@ -74,7 +74,7 @@ const handleSettingsClick = () => {
           <IconButton onClick={handleSettingsClick}>
             <SettingsOutlinedIcon />
           </IconButton>
-          <IconButton onClick={user}>
+          <IconButton>
             <Avatar
               style={{ width: "30px", height: "30px" }}
               src={userLogo}
