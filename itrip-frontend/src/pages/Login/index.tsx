@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import api from '../../api/api'
 import eyeClosed from '../../img/Olho Fechado.svg'
 import eyeOpen from '../../img/Olho.svg'
-import axios from 'axios';
 
 export function Login() {
     localStorage.removeItem('token');

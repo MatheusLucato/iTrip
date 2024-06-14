@@ -38,12 +38,13 @@ export function Register() {
 
         try {
             const isMotorista = role === 'motorista';
-            const registerData = { username, cpf, cep, password, isMotorista, cnh: isMotorista ? cnh : null };
+            const registerData = { username, cpf, cep, password, isMotorista, cnh: isMotorista ? cnh : '' };
             const response = await api.post("/api/register", registerData);
             const { token } = response.data;
 
             if (token && token.token) {
                 localStorage.setItem("token", token.token);
+                localStorage.setItem("username", response.data.usuario.username)
                 navigate("/home");
             } else {
                 setError("Credenciais inválidas. Verifique seu e-mail e senha.");

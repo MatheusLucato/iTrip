@@ -38,7 +38,7 @@ export default class AuthController {
         const cpf = request.input('cpf');
         const cep = request.input('cep');
         const ismotorista = request.input('isMotorista');
-        const cnh = !ismotorista ? '' : request.input('cnh');
+        const cnh = request.input('cnh');
     
         return await this.authService.register(auth, username, password, cpf, cep, ismotorista, cnh, response);
     }
