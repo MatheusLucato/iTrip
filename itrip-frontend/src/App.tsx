@@ -6,8 +6,7 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import api from '../src/api/api';
 import InvalidPage from './pages/Invalid';
-import User from './pages/User';
-import Ajustes from './pages/Ajustes';
+import { Ajustes } from './pages/Ajustes';
 import { Register } from './pages/Register';
 
 function App() {
@@ -68,11 +67,9 @@ function App() {
 
             <Route path="/login" element={<Login />} />
 
-            <Route path="/user" element={<User />} />
-
             <Route path="/register" element={<Register />} />
 
-            <Route path="/Ajustes" element={<Ajustes />} />
+            <Route path="/ajustes" element={<Ajustes />} />
 
             <Route path="*" element={<InvalidPage />} />
 

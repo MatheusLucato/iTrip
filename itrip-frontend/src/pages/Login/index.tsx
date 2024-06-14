@@ -39,7 +39,7 @@ export function Login() {
 
     return (
         <div className='body bg-gray-100 flex justify-center items-center h-screen'>
-            <div className="container bg-white p-8 rounded-3xl shadow-md w-96"> {/* Increased border radius */}
+            <div className="container bg-white p-8 rounded-3xl shadow-md w-96">
                 <form onSubmit={handleLogin}>
                     <h1 className="text-xl font-bold mb-4 text-center">Login</h1>
                     <input type="text" placeholder="Username" className="input border border-gray-300 p-2 w-full mb-4 rounded-lg" value={username} onChange={(e) => setusername(e.target.value)} required />

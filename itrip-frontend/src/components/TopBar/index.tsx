@@ -1,17 +1,12 @@
-import { Avatar, Box, IconButton, useTheme } from "@mui/material";
-import InputBase from "@mui/material/InputBase";
+import { Box, IconButton, useTheme } from "@mui/material";
+
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import SearchIcon from "@mui/icons-material/Search";
-import userLogo from "../../img/userLogo.png";
-import { LogOutIcon } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LogoutOutlined } from "@mui/icons-material";
 import api from "../../api/api";
 import { useNavigate } from "react-router-dom";
 
 const Topbar = () => {
-  const theme = useTheme();
   const navigate = useNavigate()
 
   async function logout() {
@@ -44,7 +39,7 @@ async function user() {
 }
 
 const handleSettingsClick = () => {
-  navigate("/Ajustes");
+  navigate("/ajustes");
 };
 
 
@@ -73,12 +68,6 @@ const handleSettingsClick = () => {
           </IconButton>
           <IconButton onClick={handleSettingsClick}>
             <SettingsOutlinedIcon />
-          </IconButton>
-          <IconButton>
-            <Avatar
-              style={{ width: "30px", height: "30px" }}
-              src={userLogo}
-            />
           </IconButton>
           <IconButton onClick={logout}>
             <LogoutOutlined />

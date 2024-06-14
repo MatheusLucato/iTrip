@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid'
 import { DateTime } from 'luxon'
 import { BaseModel, column, beforeCreate, beforeSave } from '@ioc:Adonis/Lucid/Orm'
-import Hash from '@ioc:Adonis/Core/Hash'
+import { encrypt } from '../../config/crypto'
 
 export default class User extends BaseModel {
   public static table = 'users'
@@ -43,8 +43,7 @@ export default class User extends BaseModel {
 
   @beforeSave()
   public static async hashPassword(usuario: User) {
-    if (usuario.$dirty.password) {
-      usuario.password = await Hash.make(usuario.password)
-    }
+    usuario.password = await encrypt(usuario.password)
   }
+  
 }

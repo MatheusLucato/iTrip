@@ -9,6 +9,9 @@ Route.group(() => {
   Route.post('getTokenLog','AuthController.getTokenLog')
   Route.post('deleteTokenLog', 'AuthController.deleteTokenLog')
   Route.post('findUserIdByToken', 'AuthController.findUserIdByToken')
-  Route.post('closeWindowDelete', 'AuthController.closeWindowDelete')
   Route.post('register', 'AuthController.register')
+
+
+  
+  Route.put('changePassword', 'UserController.changePassword')
 }).prefix('api')

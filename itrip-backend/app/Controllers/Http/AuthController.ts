@@ -27,10 +27,6 @@ export default class AuthController {
         return await this.authService.findUserIdByToken(request.input('token'), response)
     }
 
-    public async closeWindowDelete({ request, response }: any) {
-        const idUser = await this.authService.findUserIdByToken(request.input('token'), response)
-        await this.authService.deleteTokenLog(idUser.user_id, response)
-    }   
 
     public async register ({ auth, request, response }: any) {
         const username = request.input('username');

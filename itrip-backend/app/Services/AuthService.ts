@@ -1,26 +1,34 @@
+
 import User from 'App/Models/User'
 import UsersLog from 'App/Models/Users_Log'
 import { DateTime } from 'luxon'
+import { encrypt, decrypt } from '../../config/crypto'
 
 export default class AuthService {
 
     public async login(auth, username, password, response) {
-        const usuario = await User.findBy('username', username)
+        const usuario = await User.findBy('username', username);
         if (!usuario) {
-            return response.badRequest('Usuário não encontrado')
+            return response.badRequest('Usuário não encontrado');
         }
-
+    
         try {
-            const token = await auth.use('api').attempt(username, password, {
-                expiresIn: '120mins',
-                name: usuario?.username,
-            })
+            if (decrypt(usuario.password) == password) {
 
-            await this.addTokenLog(token, usuario)
+                const token = await auth.use('api').generate(usuario, {
+                    expiresIn: '120mins'
+                });
 
-            return { token, usuario: { id: usuario?.id, username: usuario?.username } }
-        } catch {
-            return response.unauthorized('Credenciais inválidas')
+
+                await this.addTokenLog(token, usuario);
+    
+                return response.ok({ message: 'Sucesso!', token, usuario: { id: usuario.id, username: usuario.username } });
+            } else {
+                return response.unauthorized('Credenciais inválidas');
+            }
+        } catch (error) {
+            console.log(error);
+            return response.internalServerError('Erro ao processar login');
         }
     }
 
@@ -98,7 +106,7 @@ export default class AuthService {
             return response.status(500);
         }
     }
-
+    
     public async register(auth, username, password, cpf, cep, ismotorista, cnh, response){
         try {
             const existingUser = await User.findBy('username', username);
@@ -109,7 +117,7 @@ export default class AuthService {
             if (existingCPF) {
                 return response.badRequest('O cpf já está em uso');
             }
-
+    
             if(ismotorista){
                 const existingCNH = await User.findBy('cnh', cnh);
                 if (existingCNH) {
@@ -126,7 +134,7 @@ export default class AuthService {
                 cnh
             });
     
-            const token = await auth.use('api').attempt(username, password, {
+            const token = await auth.use('api').generate(user, {
                 expiresIn: '120mins',
                 name: user.username,
             });
