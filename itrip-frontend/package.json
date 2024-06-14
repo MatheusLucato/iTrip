@@ -25,6 +25,7 @@
     "lucide-react": "^0.338.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.1",
+    "react-datepicker": "^7.0.0",
     "react-dom": "^18.2.0",
     "react-input-mask": "^2.0.4",
     "react-pro-sidebar": "^0.7.1",

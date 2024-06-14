@@ -4,6 +4,7 @@ import api from "../../api/api";
 import WarningIcon from '@material-ui/icons/Warning';
 import eyeClosed from '../../img/Olho Fechado.svg'
 import eyeOpen from '../../img/Olho.svg'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export function Ajustes() {
     const navigate = useNavigate();
@@ -77,6 +78,20 @@ export function Ajustes() {
         navigate('/home');
     };
 
+    const handleAccountDeletion = async () => {
+        const token = localStorage.getItem('token')
+        const response = await api.put("/api/deleteAccount", { token })
+
+        if (response.status === 200) {
+            setError("Conta deletada com sucesso.");
+            localStorage.removeItem('username')
+            localStorage.removeItem('token')
+            navigate('login')
+        } else {
+            setError(response.data?.message || "Erro desconhecido ao mudar a senha.");
+        }
+    };
+
     return (
         <div className='container mx-auto p-1 max-w-4xl'>
             <h1 className="text-2xl font-bold text-center mb-6">Ajustes</h1>
@@ -135,6 +150,11 @@ export function Ajustes() {
                         setSenhaAtual('fakePassword')
                     }} className="w-full py-2 mt-4 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200">{"Cancelar"}</button>
                 }
+            </div>
+            <div className="mt-8">
+                <h2 className="text-xl font-semibold mb-4">Exclusão da Conta</h2> 
+                <button onClick={handleAccountDeletion} className="py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200">
+                    Solicitar Exclusão da Conta <DeleteForeverIcon></DeleteForeverIcon></button>
             </div>
             <div className="mt-8">
                 <h2 className="text-xl font-semibold mb-4">Preferências de Notificação</h2>
