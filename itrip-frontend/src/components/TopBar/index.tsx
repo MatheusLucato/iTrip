@@ -36,6 +36,18 @@ async function deleteTokenLog() {
     }
 }
 
+async function user() {
+  try {
+        navigate("/user");
+  } catch (error: any) {
+  }
+}
+
+const handleSettingsClick = () => {
+  navigate("/Ajustes");
+};
+
+
   return (
     <div>
 
@@ -59,7 +71,7 @@ async function deleteTokenLog() {
           <IconButton>
             <NotificationsOutlinedIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handleSettingsClick}>
             <SettingsOutlinedIcon />
           </IconButton>
           <IconButton>
