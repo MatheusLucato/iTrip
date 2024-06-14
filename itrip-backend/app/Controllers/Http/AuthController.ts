@@ -32,11 +32,15 @@ export default class AuthController {
         await this.authService.deleteTokenLog(idUser.user_id, response)
     }   
 
-    public async register ({ auth, request, response }: any){
-        const username = request.input('username')
-        const password = request.input('confirmNewPass')
-
-        return await this.authService.register(auth, username, password, response)
-
+    public async register ({ auth, request, response }: any) {
+        const username = request.input('username');
+        const password = request.input('password');
+        const cpf = request.input('cpf');
+        const cep = request.input('cep');
+        const ismotorista = request.input('isMotorista');
+        const cnh = !ismotorista ? '' : request.input('cnh');
+    
+        return await this.authService.register(auth, username, password, cpf, cep, ismotorista, cnh, response);
     }
+    
 }
