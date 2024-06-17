@@ -21,7 +21,7 @@ export function RequestTravel() {
   const [departureTime, setDepartureTime] = useState('');
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: "AIzaSyA9MjROBJTSX0CPsWOaTtYjvbFXORbLRGU"
+    googleMapsApiKey: ""
   });
   
 
