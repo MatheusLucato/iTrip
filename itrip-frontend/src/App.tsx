@@ -6,8 +6,11 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import api from '../src/api/api';
 import InvalidPage from './pages/Invalid';
-import { Ajustes } from './pages/Ajustes';
+import { SettingsPage } from './pages/SettingsPage';
 import { Register } from './pages/Register';
+import { RequestTravel } from './pages/RequestTravel';
+import { ViewRequests } from './pages/ViewRequest';
+import MyTravels from './pages/MyTravels';
 
 function App() {
     const [isTokenValid, setTokenValid] = useState(false);
@@ -23,6 +26,9 @@ function App() {
                     if (location.pathname == '/register') {
                         navigate('/register');
                         return
+                    }
+                    if(location.pathname == '/viewRequest') {
+                        
                     }
                     setTokenValid(false);
                     navigate('/login');
@@ -69,9 +75,15 @@ function App() {
 
             <Route path="/register" element={<Register />} />
 
-            <Route path="/ajustes" element={<Ajustes />} />
+            <Route path="/settings" element={<SettingsPage />} />
 
             <Route path="*" element={<InvalidPage />} />
+
+            <Route path="/requestTravel" element={<RequestTravel />} />
+
+            <Route path="/viewRequest" element={<ViewRequests />} />
+
+            <Route path="/mytravels" element={<MyTravels />} />
 
 
 

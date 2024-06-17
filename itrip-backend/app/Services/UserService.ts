@@ -23,7 +23,7 @@ export default class UserService {
         }
 
 
-        if (!decrypt(user.password) === senhaAtual) {
+        if (!decrypt(user.password) == senhaAtual) {
             return { error: 'Senha atual incorreta.' };
         }
 

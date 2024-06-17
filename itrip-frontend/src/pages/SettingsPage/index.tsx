@@ -6,7 +6,7 @@ import eyeClosed from '../../img/Olho Fechado.svg'
 import eyeOpen from '../../img/Olho.svg'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-export function Ajustes() {
+export function SettingsPage() {
     const navigate = useNavigate();
     const [novaSenha, setNovaSenha] = useState("");
     const [confirmarNovaSenha, setConfirmarNovaSenha] = useState("");

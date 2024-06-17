@@ -15,4 +15,10 @@ Route.group(() => {
   
   Route.put('changePassword', 'UserController.changePassword')
   Route.put('deleteAccount', 'UserController.deleteAccount')
+
+  Route.post('newTravel', 'TravelController.newTravel')
+  Route.get('getAllTravels', 'TravelController.getAllTravels');
+  Route.post('travelAccept', 'TravelController.travelAccept');
+  Route.get('getTravelById', 'TravelController.getTravelById');
+  Route.post('deleteTravel', 'TravelController.deleteTravel');
 }).prefix('api')

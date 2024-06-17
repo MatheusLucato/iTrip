@@ -45,6 +45,8 @@ export function Register() {
             if (token && token.token) {
                 localStorage.setItem("token", token.token);
                 localStorage.setItem("username", response.data.usuario.username)
+                const motorista = response.data.usuario.isMotorista ? '1' : '0'
+                localStorage.setItem("motorista", motorista)
                 navigate("/home");
             } else {
                 setError("Credenciais inválidas. Verifique seu e-mail e senha.");

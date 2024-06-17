@@ -22,6 +22,7 @@ export function Login() {
             if (token && token.token) {
                 localStorage.setItem("token", token.token);
                 localStorage.setItem("username", response.data.usuario.username)
+                localStorage.setItem("motorista", response.data.usuario.ismotorista)
                 navigate("/home");
             } else {
                 setError("Credenciais inválidas. Verifique seu e-mail e senha.");

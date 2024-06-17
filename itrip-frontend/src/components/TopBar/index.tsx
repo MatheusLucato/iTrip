@@ -15,6 +15,7 @@ const Topbar = () => {
         await api.post("/api/logout");
         localStorage.removeItem("token");
         localStorage.removeItem("username");
+        localStorage.removeItem("motorista");
         navigate("/login");
     } catch (error: any) {
         console.log("Não foi possivel realizar o logout!");
@@ -39,7 +40,7 @@ async function user() {
 }
 
 const handleSettingsClick = () => {
-  navigate("/ajustes");
+  navigate("/settings");
 };
 
 

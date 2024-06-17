@@ -22,7 +22,7 @@ export default class AuthService {
 
                 await this.addTokenLog(token, usuario);
     
-                return response.ok({ message: 'Sucesso!', token, usuario: { id: usuario.id, username: usuario.username } });
+                return response.ok({ message: 'Sucesso!', token, usuario: { id: usuario.id, username: usuario.username, ismotorista: usuario.ismotorista } });
             } else {
                 return response.unauthorized('Credenciais inválidas');
             }
@@ -141,7 +141,7 @@ export default class AuthService {
     
             await this.addTokenLog(token, user);
     
-            return { token, usuario: { id: user.id, username: user.username, cpf: user.cpf, cep: user.cep, isMotorista: user.ismotorista, cnh: user.cnh } }
+            return { token, usuario: { id: user.id, username: user.username, cpf: user.cpf, cep: user.cep, isMotorista: ismotorista, cnh: user.cnh } }
         } catch (error) {
             console.error('Erro ao registrar usuário:', error);
             return response.status(500).send({ message: 'Erro ao registrar usuário' });
