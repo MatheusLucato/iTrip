@@ -1,17 +1,12 @@
-Projeto escolhido foi Itrip desenvolvido semestre passado na aula de Experiencia Criativa de um aplicativo de transporte e armazenamento
+1. Componentização no Projeto de Configurações de Usuário
+A componentização foi adotada para modularizar a página de configurações, tornando-a mais reutilizável, escalável e fácil de manter.
 
-1-Componentização no Projeto de Configurações de Usuário
-A componentização é uma prática importante para tornar o código mais modular, reutilizável e fácil de manter. No contexto do seu projeto, a ideia é transformar diferentes partes da interface de usuário em componentes independentes e configuráveis, facilitando alterações e tornando o código mais organizado.
+Refatoração da Página de Configurações
+A página de configurações do usuário foi dividida em componentes menores e reutilizáveis. Os campos como username, password, e CNH agora são renderizados utilizando um componente genérico InputField. Botões como editar, salvar, e cancelar foram movidos para um componente chamado ActionButtons. Além disso, a alternância entre temas foi isolada em um componente ThemeToggle.
 
-Neste projeto, a página de configurações foi refatorada para adotar a componentização de maneira eficaz. O formulário de configurações do usuário, que inclui campos como username, password e CNH, foi dividido em componentes reutilizáveis, como o TextField do Material-UI, permitindo que cada campo de entrada fosse facilmente configurado e modificado conforme necessário. Além disso, funções como editar dados e alterar tema também foram isoladas, permitindo que o código fosse mais legível e fácil de manter.
-
-
-Para implementar a componentização no código de configurações do usuário, podemos dividir a funcionalidade em partes menores, criando componentes reutilizáveis. Vou sugerir alguns componentes que podem ser criados, como o InputField para campos de entrada, ActionButtons para os botões de edição e salvar, e um ThemeToggle para a alternância entre o tema claro e escuro.
-
-Aqui está como podemos estruturar os componentes:
-
-1. Componente InputField.tsx
-Este componente será responsável por renderizar os campos de entrada, como username, password e CNH, de forma reutilizável ficando assim
+Componentes Criados
+1.1 Componente InputField.tsx
+Este componente é responsável por renderizar os campos de entrada do formulário.
 
 import React from 'react';
 import { TextField } from '@mui/material';
@@ -41,9 +36,9 @@ const InputField: React.FC<InputFieldProps> = ({ label, name, value, onChange, d
 
 export default InputField;
 
+1.2 Componente ActionButtons.tsx
+Gerencia as ações de editar, salvar, e cancelar, recebendo as funções correspondentes via props.
 
-1.2- Componente ActionButtons.tsx
-Este componente gerencia os botões de editar, salvar e cancelar. Ele vai receber funções como toggleEditing e handleUpdateUserData como props para realizar as ações apropriadas.
 import React from 'react';
 import { Button, Box } from '@mui/material';
 
@@ -77,173 +72,124 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({ editing, onEdit, onSave, 
 
 export default ActionButtons;
 
-
-com essas mudanças o código fica mais modular, limpo e fácil de manter, além de ser facilmente escalável caso novos campos ou funcionalidades sejam adicionados no futuro
-
-
-2-Criação da Funções para as chamadas de API Resquest(Facade)
-O padrão Facade é um padrão de design que oferece uma interface unificada e simplificada para gerenciar operações complexas dentro de um sistema. Ao aplicar o Facade, ocultamos a complexidade das interações internas e fornecemos uma interface mais intuitiva e fácil de usar para os consumidores do código
-
-AuthController está assim
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import AuthService from 'App/Services/AuthService'
+Benefícios
+Modularidade: O código agora é mais limpo e organizado.
+Reutilização: Os componentes podem ser utilizados em outras partes do sistema.
+Escalabilidade: Facilita a adição de novos campos ou funcionalidades no futuro.
 
 
-export default class AuthController {
-    private authService = new AuthService()
+2. Criação de Funções para Chamadas de API (Padrão Facade)
+O padrão Facade foi implementado para unificar e simplificar a lógica de autenticação e operações relacionadas. A lógica foi encapsulada em um AuthService, enquanto o AuthController atua como intermediário entre as rotas e o serviço.
 
-    public async login({ auth, request, response }: HttpContextContract) {
-        const username = request.input('username')
-        const password = request.input('password')
-        return await this.authService.login(auth, username, password, response)
-    }
+AuthController.ts
+A refatoração do controller padronizou as chamadas para o serviço de autenticação, eliminando redundâncias.
 
-    public async logout({ auth, response }: HttpContextContract) {
-        return await this.authService.logout(auth, response)
-    }
-
-    public async getTokenLog({ request, response }: HttpContextContract) {
-        return await this.authService.getTokenLog(request.input('idUser'), response)
-    }
-
-    public async deleteTokenLog({ request, response }: HttpContextContract) {
-        return await this.authService.deleteTokenLog(request.input('idUser'), response)
-    }
-
-    public async findUserIdByToken({ request, response }: any) {
-        return await this.authService.findUserIdByToken(request.input('token'), response)
-    }
-
-    public async closeWindowDelete({ request, response }: any) {
-        const idUser = await this.authService.findUserIdByToken(request.input('token'), response)
-        await this.authService.deleteTokenLog(idUser.user_id, response)
-    }   
-
-    public async register ({ auth, request, response }: any) {
-        const username = request.input('username');
-        const password = request.input('password');
-        const cpf = request.input('cpf');
-        const cep = request.input('cep');
-        const ismotorista = request.input('isMotorista');
-        const cnh = !ismotorista ? '' : request.input('cnh');
-    
-        return await this.authService.register(auth, username, password, cpf, cep, ismotorista, cnh, response);
-    }
-    
-}
-
-e ficaria assim
-
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import AuthService from 'App/Services/AuthService'
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import AuthService from 'App/Services/AuthService';
 
 export default class AuthController {
-    private authService = new AuthService()
+  private authService = new AuthService();
 
-    public async login({ auth, request, response }: HttpContextContract) {
-        const username = request.input('username')
-        const password = request.input('password')
-        return await this.authService.login(auth, username, password, response)
-    }
+  public async login({ auth, request, response }: HttpContextContract) {
+    const username = request.input('username');
+    const password = request.input('password');
+    return await this.authService.login(auth, username, password, response);
+  }
 
-    public async logout({ auth, response }: HttpContextContract) {
-        return await this.authService.logout(auth, response)
-    }
+  public async logout({ auth, response }: HttpContextContract) {
+    return await this.authService.logout(auth, response);
+  }
 
-    public async getTokenLog({ request, response }: HttpContextContract) {
-        const idUser = request.input('idUser')
-        return await this.authService.getTokenLog(idUser, response)
-    }
+  public async getTokenLog({ request, response }: HttpContextContract) {
+    const idUser = request.input('idUser');
+    return await this.authService.getTokenLog(idUser, response);
+  }
 
-    public async deleteTokenLog({ request, response }: HttpContextContract) {
-        const idUser = request.input('idUser')
-        return await this.authService.deleteTokenLog(idUser, response)
-    }
+  public async deleteTokenLog({ request, response }: HttpContextContract) {
+    const idUser = request.input('idUser');
+    return await this.authService.deleteTokenLog(idUser, response);
+  }
 
-    public async findUserIdByToken({ request, response }: HttpContextContract) {
-        const token = request.input('token')
-        return await this.authService.findUserIdByToken(token, response)
-    }
+  public async findUserIdByToken({ request, response }: HttpContextContract) {
+    const token = request.input('token');
+    return await this.authService.findUserIdByToken(token, response);
+  }
 
-    public async closeWindowDelete({ request, response }: HttpContextContract) {
-        const token = request.input('token')
-        const userId = await this.authService.findUserIdByToken(token, response)
-        await this.authService.deleteTokenLog(userId.user_id, response)
-    }
+  public async closeWindowDelete({ request, response }: HttpContextContract) {
+    const token = request.input('token');
+    const userId = await this.authService.findUserIdByToken(token, response);
+    await this.authService.deleteTokenLog(userId.user_id, response);
+  }
 
-    public async register({ auth, request, response }: HttpContextContract) {
-        const username = request.input('username')
-        const password = request.input('password')
-        const cpf = request.input('cpf')
-        const cep = request.input('cep')
-        const isMotorista = request.input('isMotorista')
-        const cnh = !isMotorista ? '' : request.input('cnh')
+  public async register({ auth, request, response }: HttpContextContract) {
+    const username = request.input('username');
+    const password = request.input('password');
+    const cpf = request.input('cpf');
+    const cep = request.input('cep');
+    const isMotorista = request.input('isMotorista');
+    const cnh = !isMotorista ? '' : request.input('cnh');
 
-        return await this.authService.register(auth, username, password, cpf, cep, isMotorista, cnh, response)
-    }
+    return await this.authService.register(auth, username, password, cpf, cep, isMotorista, cnh, response);
+  }
 }
 
-juntamente criando um authService para ela que ficaria assim
+AuthService.ts
+Toda a lógica de autenticação foi encapsulada neste serviço.
 
-import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
 
 export default class AuthService {
-    
-    public async login(auth: any, username: string, password: string, response: HttpContextContract['response']) {
-        try {
-            const user = await auth.use('api').attempt(username, password)
-            return response.json({ token: user.token })
-        } catch (error) {
-            return response.badRequest('Invalid credentials')
-        }
+  public async login(auth: any, username: string, password: string, response: HttpContextContract['response']) {
+    try {
+      const user = await auth.use('api').attempt(username, password);
+      return response.json({ token: user.token });
+    } catch (error) {
+      return response.badRequest('Invalid credentials');
     }
+  }
 
-    public async logout(auth: any, response: HttpContextContract['response']) {
-        try {
-            await auth.use('api').revoke()
-            return response.status(200).json({ message: 'Logged out successfully' })
-        } catch (error) {
-            return response.status(500).json({ message: 'Error logging out' })
-        }
+  public async logout(auth: any, response: HttpContextContract['response']) {
+    try {
+      await auth.use('api').revoke();
+      return response.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+      return response.status(500).json({ message: 'Error logging out' });
     }
+  }
 
-    public async getTokenLog(idUser: string, response: HttpContextContract['response']) {
-        // Lógica de obtenção de token log para o usuário
-        return response.json({ token: `Token for user ${idUser}` })
-    }
+  public async getTokenLog(idUser: string, response: HttpContextContract['response']) {
+    return response.json({ token: `Token for user ${idUser}` });
+  }
 
-    public async deleteTokenLog(idUser: string, response: HttpContextContract['response']) {
-        // Lógica de remoção de token
-        return response.json({ message: `Token for user ${idUser} deleted successfully` })
-    }
+  public async deleteTokenLog(idUser: string, response: HttpContextContract['response']) {
+    return response.json({ message: `Token for user ${idUser} deleted successfully` });
+  }
 
-    public async findUserIdByToken(token: string, response: HttpContextContract['response']) {
-        // Lógica para encontrar o usuário baseado no token
-        return response.json({ user_id: '12345' })
-    }
+  public async findUserIdByToken(token: string, response: HttpContextContract['response']) {
+    return response.json({ user_id: '12345' });
+  }
 
-    public async register(auth: any, username: string, password: string, cpf: string, cep: string, isMotorista: boolean, cnh: string, response: HttpContextContract['response']) {
-        try {
-            const user = await auth.use('api').create({
-                username,
-                password,
-                cpf,
-                cep,
-                isMotorista,
-                cnh
-            })
-            return response.status(201).json({ message: 'User registered successfully', user })
-        } catch (error) {
-            return response.status(500).json({ message: 'Error registering user' })
-        }
+  public async register(auth: any, username: string, password: string, cpf: string, cep: string, isMotorista: boolean, cnh: string, response: HttpContextContract['response']) {
+    try {
+      const user = await auth.use('api').create({
+        username,
+        password,
+        cpf,
+        cep,
+        isMotorista,
+        cnh,
+      });
+      return response.status(201).json({ message: 'User registered successfully', user });
+    } catch (error) {
+      return response.status(500).json({ message: 'Error registering user' });
     }
+  }
 }
 
-Benefícioos:
-Encapsulamento: A lógica de autenticação e outras operações são centralizadas no AuthService, evitando duplicação de código.
-Manutenção Facilitada: Se houver mudanças na lógica de autenticação ou no processo de registro, você só precisará atualizar o AuthService.
-Escalabilidade: Caso o sistema precise de mais funcionalidades de autenticação ou novos métodos de interação com a API
-
+Benefícios
+Encapsulamento: Centraliza a lógica de autenticação no AuthService.
+Manutenção Facilitada: Alterações precisam ser feitas apenas no AuthService.
+Reutilização: As funções podem ser facilmente usadas por diferentes controladores.
 
 3-Implementação do Padrão Observer para Notificações
 O padrão Observer serve para resolver o problema de notificação de mudanças de estado em um sistema de maneira eficiente e desacoplada. Em outras palavras, ele permite que um objeto (sujeito) notifique automaticamente outros objetos dependentes (observadores) sobre mudanças de seu estado, sem que o sujeito precise saber ou se preocupar com os detalhes de quem está sendo notificado.
@@ -476,3 +422,230 @@ Extensibilidade: Novas formas de validação podem ser adicionadas sem alterar o
 
 
 5- Adicionar uma Função Factory para Notificações
+Factory é um padrão criacional fornecem uma interface para criar objetos em uma superclasse, mas permite as subclasses alterem o tipo de objetos que serão criados.
+
+Código atual
+import { Avatar, Box, IconButton, useTheme } from "@mui/material";
+import InputBase from "@mui/material/InputBase";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import SearchIcon from "@mui/icons-material/Search";
+import userLogo from "../../img/userLogo.png";
+import { LogOutIcon } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LogoutOutlined } from "@mui/icons-material";
+import api from "../../api/api";
+import { useNavigate } from "react-router-dom";
+
+const Topbar = () => {
+  const theme = useTheme();
+  const navigate = useNavigate()
+
+  async function logout() {
+    try {
+        deleteTokenLog();
+        await api.post("/api/logout");
+        localStorage.removeItem("token");
+        localStorage.removeItem("username");
+        navigate("/login");
+    } catch (error: any) {
+        console.log("Não foi possivel realizar o logout!");
+    }
+}
+
+async function deleteTokenLog() {
+    try {
+        const token = localStorage.getItem('token')
+        const idUser = (await api.post('/api/findUserIdByToken', { token })).data.user_id
+        const response = await api.post('/api/deleteTokenLog', { idUser });
+    } catch (error: any) {
+
+    }
+}
+
+async function user() {
+  try {
+        navigate("/user");
+  } catch (error: any) {
+  }
+}
+
+const handleSettingsClick = () => {
+  navigate("/Ajustes");
+};
+
+
+  return (
+    <div>
+
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        p={2}
+        style={{ backgroundColor: "#F3F4F6", borderLeft: "1px", maxHeight: "60px" }}
+      >
+        <Box
+          sx={{ display: "flex", borderRadius: "3px", backgroundColor: "#D1D5DB" }}
+        >
+
+        </Box>
+        <a href="/home">
+
+          <h1 className="text-gray-700 origin-left font-medium text-2xl duration-300">iTrip</h1>
+        </a>
+
+        <Box display="flex">
+          <IconButton>
+            <NotificationsOutlinedIcon />
+          </IconButton>
+          <IconButton onClick={handleSettingsClick}>
+            <SettingsOutlinedIcon />
+          </IconButton>
+          <IconButton>
+            <Avatar
+              style={{ width: "30px", height: "30px" }}
+              src={userLogo}
+            />
+          </IconButton>
+          <IconButton onClick={logout}>
+            <LogoutOutlined />
+          </IconButton>
+        </Box>
+      </Box>
+    </div>
+  );
+};
+
+export default Topbar;
+
+
+código com Função Factory 
+import { Avatar, Box, IconButton } from "@mui/material";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import LogoutOutlined from "@mui/icons-material/LogoutOutlined";
+import userLogo from "../../img/userLogo.png";
+import { useNavigate } from "react-router-dom";
+import api from "../../api/api";
+
+// Função Factory para criar notificações
+const createNotification = (type: string, message: string) => {
+  return { type, message, timestamp: new Date() };
+};
+
+const Topbar = () => {
+  const navigate = useNavigate();
+
+  async function logout() {
+    try {
+      await deleteTokenLog();
+      await api.post("/api/logout");
+      localStorage.removeItem("token");
+      localStorage.removeItem("username");
+
+      const notification = createNotification(
+        "success",
+        "Logout realizado com sucesso!"
+      );
+      console.log(notification); // Você pode exibir no console ou integrar com um sistema de notificações.
+
+      navigate("/login");
+    } catch (error: any) {
+      const notification = createNotification(
+        "error",
+        "Não foi possível realizar o logout."
+      );
+      console.error(notification);
+    }
+  }
+
+  async function deleteTokenLog() {
+    try {
+      const token = localStorage.getItem("token");
+      const idUser = (await api.post("/api/findUserIdByToken", { token })).data
+        .user_id;
+      await api.post("/api/deleteTokenLog", { idUser });
+
+      const notification = createNotification(
+        "info",
+        "Token de autenticação removido."
+      );
+      console.log(notification);
+    } catch (error: any) {
+      const notification = createNotification(
+        "error",
+        "Erro ao remover token de autenticação."
+      );
+      console.error(notification);
+    }
+  }
+
+  async function user() {
+    try {
+      navigate("/user");
+    } catch (error: any) {
+      const notification = createNotification(
+        "error",
+        "Erro ao navegar para o perfil do usuário."
+      );
+      console.error(notification);
+    }
+  }
+
+  const handleSettingsClick = () => {
+    navigate("/Ajustes");
+    const notification = createNotification(
+      "info",
+      "Redirecionando para as configurações."
+    );
+    console.log(notification);
+  };
+
+  return (
+    <div>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        p={2}
+        style={{ backgroundColor: "#F3F4F6", borderLeft: "1px", maxHeight: "60px" }}
+      >
+        <a href="/home">
+          <h1 className="text-gray-700 origin-left font-medium text-2xl duration-300">
+            iTrip
+          </h1>
+        </a>
+
+        <Box display="flex">
+          <IconButton>
+            <NotificationsOutlinedIcon />
+          </IconButton>
+          <IconButton onClick={handleSettingsClick}>
+            <SettingsOutlinedIcon />
+          </IconButton>
+          <IconButton>
+            <Avatar style={{ width: "30px", height: "30px" }} src={userLogo} />
+          </IconButton>
+          <IconButton onClick={logout}>
+            <LogoutOutlined />
+          </IconButton>
+        </Box>
+      </Box>
+    </div>
+  );
+};
+
+export default Topbar;
+Função Factory createNotification:
+
+5.1- Essa função aceita dois parâmetros (type e message) e retorna um objeto de notificação padronizado.
+Inclui um timestamp automático para rastrear o momento em que a notificação foi criada.
+Integração com o Componente:
+
+5.2 -Cada ação (logout, deleteTokenLog, handleSettingsClick) utiliza a função createNotification para criar mensagens apropriadas.
+Essas notificações podem ser exibidas no console ou integradas com uma biblioteca de notificações (como notistack, toastify, etc.).
+
+5.3-Flexibilidade:Com a Factory, você pode facilmente criar diferentes tipos de notificações (success, error, info) em qualquer parte do código.
+
+
+Conclusão
+Estas refatorações tornam o projeto iTrip mais escalável, modular e de fácil manutenção. A adoção de padrões como Componentização e Facade simplifica a lógica do sistema e permite a integração de novas funcionalidades com menos esforço.
