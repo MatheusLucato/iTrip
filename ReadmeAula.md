@@ -1,12 +1,15 @@
+## Projeto escolhodio foi o Itrip Desenvolvido Na materia de Experiência criativa apresentado Semestre passado
+## Aluno: julien
+
 1. Componentização no Projeto de Configurações de Usuário
 A componentização foi adotada para modularizar a página de configurações, tornando-a mais reutilizável, escalável e fácil de manter.
 
 Refatoração da Página de Configurações
 A página de configurações do usuário foi dividida em componentes menores e reutilizáveis. Os campos como username, password, e CNH agora são renderizados utilizando um componente genérico InputField. Botões como editar, salvar, e cancelar foram movidos para um componente chamado ActionButtons. Além disso, a alternância entre temas foi isolada em um componente ThemeToggle.
 
-Componentes Criados
-1.1 Componente InputField.tsx
-Este componente é responsável por renderizar os campos de entrada do formulário.
+ ## Componentes Criados
+ 1.1 Componente InputField.tsx
+ Este componente é responsável por renderizar os campos de entrada do formulário.
 
 import React from 'react';
 import { TextField } from '@mui/material';
@@ -36,7 +39,7 @@ const InputField: React.FC<InputFieldProps> = ({ label, name, value, onChange, d
 
 export default InputField;
 
-1.2 Componente ActionButtons.tsx
+## 1.2 Componente ActionButtons.tsx
 Gerencia as ações de editar, salvar, e cancelar, recebendo as funções correspondentes via props.
 
 import React from 'react';
@@ -78,7 +81,7 @@ Reutilização: Os componentes podem ser utilizados em outras partes do sistema.
 Escalabilidade: Facilita a adição de novos campos ou funcionalidades no futuro.
 
 
-2. Criação de Funções para Chamadas de API (Padrão Facade)
+ ## 2. Criação de Funções para Chamadas de API (Padrão Facade)
 O padrão Facade foi implementado para unificar e simplificar a lógica de autenticação e operações relacionadas. A lógica foi encapsulada em um AuthService, enquanto o AuthController atua como intermediário entre as rotas e o serviço.
 
 AuthController.ts
@@ -191,7 +194,7 @@ Encapsulamento: Centraliza a lógica de autenticação no AuthService.
 Manutenção Facilitada: Alterações precisam ser feitas apenas no AuthService.
 Reutilização: As funções podem ser facilmente usadas por diferentes controladores.
 
-3-Implementação do Padrão Observer para Notificações
+## 3-Implementação do Padrão Observer para Notificações
 O padrão Observer serve para resolver o problema de notificação de mudanças de estado em um sistema de maneira eficiente e desacoplada. Em outras palavras, ele permite que um objeto (sujeito) notifique automaticamente outros objetos dependentes (observadores) sobre mudanças de seu estado, sem que o sujeito precise saber ou se preocupar com os detalhes de quem está sendo notificado.
 
 para implementar o observer eu criaria a classe oberser que ficaria mais ou menos assim
@@ -392,18 +395,18 @@ Garante que a interface reaja instantaneamente as mudanças.
 
 
 
-4.Aplicando o Padrão Strategy para Validação no front no app.tsx
+## 4.Aplicando o Padrão Strategy para Validação no front no app.tsx
 
 
 O padrão Strategy permite definir uma família de algoritmos ou comportamentos que podem ser usados de forma intercambiável, encapsulando cada um deles em classes distintas. Dessa forma, é possível escolher a estratégia apropriada para cada situação, tornando o código mais flexível e modular. No código original do arquivo CartaoModal.js, a função validateInfo é responsável por verificar os dados do cartão. Podemos aplicar o padrão Strategy ao separar as validações específicas de cada campo, organizando-as em diferentes classes de validação. Isso facilita a manutenção e a expansão do código.
 
-4.1- eu criaria a classe para a validação do strategy que ficaria assim
+## 4.1- eu criaria a classe para a validação do strategy que ficaria assim
 
 interface TokenValidationStrategy {
   validate(token: string): Promise<boolean>;
 }
 
-4.2 - 2. Implementar Estratégias de Validação
+## 4.2 - 2. Implementar Estratégias de Validação
 Agora criar algumas validações como uma estratégia pode verificar o token no localStorage
 
 Estratégia de Validação por Token no LocalStorage que ficaria mais ou menos assim
@@ -421,7 +424,7 @@ Desacoplamento: O código que executa a validação não precisa saber como ela 
 Extensibilidade: Novas formas de validação podem ser adicionadas sem alterar o comportamento do restante da aplicação.
 
 
-5- Adicionar uma Função Factory para Notificações
+## 5- Adicionar uma Função Factory para Notificações
 Factory é um padrão criacional fornecem uma interface para criar objetos em uma superclasse, mas permite as subclasses alterem o tipo de objetos que serão criados.
 
 Código atual
@@ -637,15 +640,15 @@ const Topbar = () => {
 export default Topbar;
 Função Factory createNotification:
 
-5.1- Essa função aceita dois parâmetros (type e message) e retorna um objeto de notificação padronizado.
+## 5.1- Essa função aceita dois parâmetros (type e message) e retorna um objeto de notificação padronizado.
 Inclui um timestamp automático para rastrear o momento em que a notificação foi criada.
 Integração com o Componente:
 
-5.2 -Cada ação (logout, deleteTokenLog, handleSettingsClick) utiliza a função createNotification para criar mensagens apropriadas.
+## 5.2 -Cada ação (logout, deleteTokenLog, handleSettingsClick) utiliza a função createNotification para criar mensagens apropriadas.
 Essas notificações podem ser exibidas no console ou integradas com uma biblioteca de notificações (como notistack, toastify, etc.).
 
-5.3-Flexibilidade:Com a Factory, você pode facilmente criar diferentes tipos de notificações (success, error, info) em qualquer parte do código.
+## 5.3-Flexibilidade:Com a Factory, você pode facilmente criar diferentes tipos de notificações (success, error, info) em qualquer parte do código.
 
 
-Conclusão
+## Conclusão
 Estas refatorações tornam o projeto iTrip mais escalável, modular e de fácil manutenção. A adoção de padrões como Componentização e Facade simplifica a lógica do sistema e permite a integração de novas funcionalidades com menos esforço.
