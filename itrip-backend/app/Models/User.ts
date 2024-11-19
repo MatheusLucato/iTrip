@@ -13,10 +13,22 @@ export default class User extends BaseModel {
   public secure_id: string
 
   @column()
-  public email: string
+  public username: string
 
   @column()
   public password: string
+
+  @column()
+  public cpf: string
+
+  @column()
+  public cep: string
+
+  @column()
+  public ismotorista: boolean
+
+  @column()
+  public cnh: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

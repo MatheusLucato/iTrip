@@ -10,4 +10,5 @@ Route.group(() => {
   Route.post('deleteTokenLog', 'AuthController.deleteTokenLog')
   Route.post('findUserIdByToken', 'AuthController.findUserIdByToken')
   Route.post('closeWindowDelete', 'AuthController.closeWindowDelete')
+  Route.post('register', 'AuthController.register')
 }).prefix('api')

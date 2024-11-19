@@ -19,6 +19,7 @@ const Topbar = () => {
         deleteTokenLog();
         await api.post("/api/logout");
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
         navigate("/login");
     } catch (error: any) {
         console.log("Não foi possivel realizar o logout!");
@@ -34,6 +35,18 @@ async function deleteTokenLog() {
 
     }
 }
+
+async function user() {
+  try {
+        navigate("/user");
+  } catch (error: any) {
+  }
+}
+
+const handleSettingsClick = () => {
+  navigate("/Ajustes");
+};
+
 
   return (
     <div>
@@ -58,7 +71,7 @@ async function deleteTokenLog() {
           <IconButton>
             <NotificationsOutlinedIcon />
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handleSettingsClick}>
             <SettingsOutlinedIcon />
           </IconButton>
           <IconButton>

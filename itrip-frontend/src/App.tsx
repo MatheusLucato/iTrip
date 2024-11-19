@@ -6,63 +6,80 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import api from '../src/api/api';
 import InvalidPage from './pages/Invalid';
+import User from './pages/User';
+import Ajustes from './pages/Ajustes';
+import { Register } from './pages/Register';
 
 function App() {
-const [isTokenValid, setTokenValid] = useState(false);
-const navigate = useNavigate();
-const currentLocation = useLocation();
+    const [isTokenValid, setTokenValid] = useState(false);
+    const navigate = useNavigate();
+    const location = useLocation();
 
-useEffect(() => {
-    const validateToken = async () => {
-     try {
-        const token = localStorage.getItem('token');
+    useEffect(() => {
+        const validateToken = async () => {
+            try {
+                const token = localStorage.getItem('token');
 
-        if (!token) {
-         setTokenValid(false);
-         navigate('/login');
-         return;
-        }
+                if (!token) {
+                    if (location.pathname == '/register') {
+                        navigate('/register');
+                        return
+                    }
+                    setTokenValid(false);
+                    navigate('/login');
+                    return;
+                }
 
-        const idUser = (await api.post('/api/findUserIdByToken', { token })).data.user_id
-        
-        const response = await api.post('/api/getTokenLog', { idUser });
-        if(response.status === 200){
-          if(response.data.token === token && response.data.token !== null){
-            setTokenValid(true)
-          }
-          else{
-            setTokenValid(true)
-            localStorage.setItem('token', response.data.token)
-          }
-        }else{
-          setTokenValid(false)
-          navigate('/login')
-        }
+                const idUser = (await api.post('/api/findUserIdByToken', { token })).data.user_id
 
-        
-     } catch (error) {
-        console.error('Error validating token', error);
-        setTokenValid(false);
-        navigate('/login');
-     }
-    };
+                const response = await api.post('/api/getTokenLog', { idUser });
+                if (response.status === 200) {
+                    if (response.data.token === token && response.data.token !== null) {
+                        setTokenValid(true)
+                    }
+                    else {
+                        setTokenValid(true)
+                        localStorage.setItem('token', response.data.token)
+                    }
+                } else {
+                    setTokenValid(false)
+                    navigate('/login')
+                }
 
-    validateToken();
-    
-}, [navigate]);
 
-  return (
-    <Routes>
-      <Route path="/home" element={<Home />} />
-      
-      <Route path="/" element={<Home />} />
+            } catch (error) {
+                console.error('Error validating token', error);
+                setTokenValid(false);
+                navigate('/login');
+            }
+        };
 
-      <Route path="*" element={<InvalidPage />} />
+        validateToken();
 
-      <Route path="/login" element={<Login />} />
-      
-    </Routes>
-  );
+    }, [navigate]);
+
+    return (
+        <Routes>
+            <Route path="/home" element={<Home />} />
+
+            <Route path="/" element={<Home />} />
+
+            <Route path="*" element={<InvalidPage />} />
+
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/user" element={<User />} />
+
+            <Route path="/register" element={<Register />} />
+
+            <Route path="/Ajustes" element={<Ajustes />} />
+
+            <Route path="*" element={<InvalidPage />} />
+
+
+
+        </Routes>
+    );
 }
 
 export default App;

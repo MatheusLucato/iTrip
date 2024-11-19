@@ -6,9 +6,9 @@ export default class AuthController {
     private authService = new AuthService()
 
     public async login({ auth, request, response }: HttpContextContract) {
-        const email = request.input('email')
+        const username = request.input('username')
         const password = request.input('password')
-        return await this.authService.login(auth, email, password, response)
+        return await this.authService.login(auth, username, password, response)
     }
 
     public async logout({ auth, response }: HttpContextContract) {
@@ -31,4 +31,16 @@ export default class AuthController {
         const idUser = await this.authService.findUserIdByToken(request.input('token'), response)
         await this.authService.deleteTokenLog(idUser.user_id, response)
     }   
+
+    public async register ({ auth, request, response }: any) {
+        const username = request.input('username');
+        const password = request.input('password');
+        const cpf = request.input('cpf');
+        const cep = request.input('cep');
+        const ismotorista = request.input('isMotorista');
+        const cnh = request.input('cnh');
+    
+        return await this.authService.register(auth, username, password, cpf, cep, ismotorista, cnh, response);
+    }
+    
 }
